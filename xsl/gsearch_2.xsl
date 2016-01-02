@@ -18,7 +18,7 @@
                 <h1>
                     <a href="http://gams.uni-graz.at/rem/">&lt;REM /&gt;</a> - Ergebnis
                     Volltextsuche Texten</h1>
-                <p><a href="http://gams.uni-graz.at/archive/objects/query:volltext/methods/sdef:Query/get?params=$1|{//query}">Volltextsuche nur in Buchungen</a> | Volltextsuche im gesamten
+                <p><a href="/archive/objects/query:volltext/methods/sdef:Query/get?params=$1|{//query}">Volltextsuche nur in Buchungen</a> | Volltextsuche im gesamten
                         Dokument</p>
                 <form
                     action="http://gams.uni-graz.at/search/gsearch"

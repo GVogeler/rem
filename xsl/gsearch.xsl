@@ -20,7 +20,7 @@
                 <h1>
                     <a href="http://gams.uni-graz.at/rem/">&lt;REM /&gt;</a> - Ergebnis
                     Volltextsuche Texten</h1>
-                <p><a href="http://gams.uni-graz.at/archive/objects/query:volltext/methods/sdef:Query/get?params=$1|{//query}">Volltextsuche nur in Buchungen</a> | Volltextsuche im gesamten
+                <p><a href="/archive/objects/query:volltext/methods/sdef:Query/get?params=$1|{//query}">Volltextsuche nur in Buchungen</a> | Volltextsuche im gesamten
                         Dokument</p>
                 <form
                     action="http://gams.uni-graz.at/search/gsearch"
@@ -37,10 +37,7 @@
 
     <xsl:template match="results">
         <xsl:for-each select="result">
-            <!-- FixMe: 
-                1. #hit ist noch keine solide Adresse, weil mir Navigation zwischen den Sprungpunkten noch unklar ist
-                2. Die Syntax muß noch dem matches() angepaßt werden
-            -->
+            <!-- FixMe: #hit ist noch keine solide Adresse, weil mir Navigation zwischen den Sprungpunkten noch unklar ist -->
             <h2><a href="/archive/get/{member/@uri}/sdef:TEI/get?context={//query}#hit"><xsl:value-of select="memberTitle[1]"/>, <xsl:value-of select="memberCreator[1]"/></a></h2>
             <p>z.B.</p>
             <xsl:apply-templates select="field[@name='fulltext' and @snippet='yes']"/>

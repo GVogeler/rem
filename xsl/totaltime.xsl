@@ -64,7 +64,7 @@
                     <a href="http://gams.uni-graz.at/rem/">&lt;REM /&gt;</a> - Zeitreihe Kontensummen zu <xsl:value-of select="$gesuchteskonto" />
                 </h1>
                 <p>
-                    <a href="http://gams.uni-graz.at/archive/objects/query:totalstime/methods/sdef:Query/get?params=$1|&lt;http://gams.uni-graz.at/rem/%23toplevel&gt;">Top Level</a>
+                    <a href="/archive/objects/query:totalstime/methods/sdef:Query/get?params=$1|&lt;http://gams.uni-graz.at/rem/%23toplevel&gt;">Top Level</a>
                     <xsl:for-each select="tokenize(//sr:result[1]/sr:pfad[1],'/')">
                         <xsl:if test="not(.='')">
                             <a href="./get?params=$1|&lt;http://gams.uni-graz.at/rem/%23{.}&gt;">
@@ -76,7 +76,7 @@
                 <xsl:choose>
                     <xsl:when test="$mode='graph'">
                         <p>
-                            <a href="http://gams.uni-graz.at/archive/objects/query:totalstime/methods/sdef:Query/get?params=$1|&lt;{replace($gesuchteskonto,'#','%23')}&gt;">Tabelle</a>
+                            <a href="/archive/objects/query:totalstime/methods/sdef:Query/get?params=$1|&lt;{replace($gesuchteskonto,'#','%23')}&gt;">Tabelle</a>
                         </p>
                         <script type="text/javascript">google.setOnLoadCallback(drawChart);</script>
                         <hr />          
@@ -84,7 +84,7 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <p>
-                            <a href="http://gams.uni-graz.at/archive/objects/query:totalstime/methods/sdef:Query/get?mode=graph&amp;params=$1|&lt;{replace($gesuchteskonto,'#','%23')}&gt;">Graphik</a>
+                            <a href="/archive/objects/query:totalstime/methods/sdef:Query/get?mode=graph&amp;params=$1|&lt;{replace($gesuchteskonto,'#','%23')}&gt;">Graphik</a>
                         </p>
                         <hr />
                         <div id="table">

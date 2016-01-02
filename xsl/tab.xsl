@@ -16,7 +16,6 @@
         <!-- ToDo: Suche würde $context zur Auswahl der einschlägigen Einträge verwenden -->
         <table class="grid">
             <thead>
-                <tr><td colspan="5" style="margin-bottom:20px"><h1><xsl:apply-templates select="//tei:teiHeader//tei:titleStmt//tei:title"/></h1></td></tr>
                 <tr><td colspan="20"><a href="?mode=default"/>&lt;Zurück zur Standardansicht&gt;</td></tr>
                 <tr><td>Kategorie</td><td>Originaltext</td>
                     <td>Betrag in Pfennig</td>
@@ -36,7 +35,7 @@
         <xsl:apply-templates select=".//tei:*[@ana='#bk_entry']|.//tei:*[matches(@ana,'#bk_total')]" mode="tab"/>
     </xsl:template>
     
-    <xsl:template  mode="tab" match="tei:*[matches(@ana,'#bk_total')]">
+    <xsl:template match="tei:*[matches(@ana,'#bk_total')]" mode="tab" >
         <!-- Die Summen -->
         <tr>
             <td />
@@ -92,7 +91,7 @@
                 </xsl:otherwise>
             </xsl:choose>
             <!-- Die Stichwörter -->
-            <xsl:apply-templates select=".//tei:term"/>
+<!--            <xsl:apply-templates select=".//tei:term"/>-->
         </tr>
     </xsl:template>
 

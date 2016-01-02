@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
     xmlns:bk="http://gams.uni-graz.at/rem/bookkeeping/" xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:bas="http://gams.uni-graz.at/srbas/ns/1.0"
     xmlns:html="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#default bk tei"
     version="2.0">
     <xsl:output omit-xml-declaration="yes" encoding="UTF-8" indent="yes"/>
+    <xsl:decimal-format name="european" decimal-separator=',' grouping-separator='.' />
     <!-- Anzeige von Rechnungen, 2013-12-16:
     Standardansicht
     
+    2015-01-22: seitenzahlen in Funktion bas:folioangabe($me) ausgelagert. In externe Bibliothek verlagert werden?
     2014-08-28: Trefferhervorhebung über template@name="highlighting"
     2014-06-06: Betragsberechnungen verbesser: arabische Zahlen im Text nur, wenn es keine @quantity gibt
     2014-06-04: tei:p um Klammern erweitert. ToDo: Bei Klammern in Klammern funktioniert das vermutlich nicht, weil StandOff
@@ -49,7 +52,7 @@
                     <div class="ym-col2" id="calc">
                         <!--                            <input type="button" value="Berechnen" onclick="summieren()"/>-->
                         <div class="ym-cbox">
-                            <p><a href="http://gams.uni-graz.at/archive/objects/{$pid}/datastreams/TEI_SOURCE/content" target="_blank"><img src="http://gams.uni-graz.at/reko/img/tei_icon.gif"/> Quelldaten</a></p>
+                            <p><a href="/archive/objects/{$pid}/datastreams/TEI_SOURCE/content" target="_blank"><img src="http://gams.uni-graz.at/reko/img/tei_icon.gif"/> Quelldaten</a></p>
                             <form method="get">
                                 <xsl:attribute name="action"><xsl:value-of  select="concat('/archive/get/',$pid,'/sdef:TEI/get')"/></xsl:attribute>
                                 <p>
@@ -63,9 +66,9 @@
                                 <a id="AnsichtUmschalter" href="javascript:diplomatic()"
                                     >Editionsansicht</a>
                             </h2>
-                            <h2><a href="http://gams.uni-graz.at/archive/objects/{$pid}/methods/sdef:TEI/get?mode=tab">tabellarische Ansicht</a></h2>
+                            <h2><a href="/archive/objects/{$pid}/methods/sdef:TEI/get?mode=tab">tabellarische Ansicht</a></h2>
                             <h2>Beträge</h2>
-                            <p><a href="http://gams.uni-graz.at/archive/objects/{$pid}/datastreams/RDF/content">RDF/XML</a></p>
+                            <p><a href="/archive/objects/{$pid}/datastreams/RDF/content">RDF/XML</a></p>
                             <div id="calculations">
                                 <xsl:text> </xsl:text>
                             </div>
@@ -296,14 +299,8 @@
     <xsl:template match="tei:pb">
         <!-- Seitenwechsel mit Link auf das Bild -->
         <xsl:variable name="facs" select="substring-after(./@facs, '#')"/>
-        <xsl:variable name="seitenzahl">
-            <xsl:choose>
-                <xsl:when test="@n"><xsl:value-of select="@n"/></xsl:when>
-                <xsl:otherwise><xsl:value-of select="ceiling((count(preceding::tei:pb) + 1) div 2)"/>
-                <xsl:choose><xsl:when test="(count(preceding::tei:pb) + 1) mod 2 = 1">r</xsl:when>
-                <xsl:otherwise>v</xsl:otherwise></xsl:choose></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+        <xsl:variable name="seitenzahl" select="bas:folioangabe(.)"/>
+        
         <a>
             <xsl:attribute name="name" select="./@xml:id"/>
         </a>
@@ -311,7 +308,7 @@
             <a name="fol{$seitenzahl}"/>
             <a target="_blank">
                 <xsl:attribute name="href">
-                    <xsl:value-of select="//tei:surface[@xml:id = $facs]/tei:graphic/@url"/>
+                    <xsl:text>/archive/objects/</xsl:text><xsl:value-of select="$pid"/><xsl:text>/datastreams/</xsl:text><xsl:value-of select="//tei:surface[@xml:id = $facs]/tei:graphic/@xml:id"/><xsl:text>/content</xsl:text>
                 </xsl:attribute>
                 <xsl:text>fol. </xsl:text>
                 <xsl:value-of select="$seitenzahl"/>
@@ -379,7 +376,8 @@
             <xsl:apply-templates/>
         </p>
     </xsl:template>        
-    <xsl:template match="*[(./@corresp and not(substring-before(@ana,'_') = '#bk')) or ./@key]">
+    <xsl:template match="*[(./@corresp and not(substring-before(@ana,'_') = '#bk')) or ./@key]" priority="-1">
+        <!-- ToDo: @corresp ist hier viel zu allgemein, um als einziges Instrument zur Fußnotenreferenz verwendet zu werden -->
         <xsl:variable name="element" select="."/>
         <!--hochgestellt und kursiv-->
         <xsl:variable name="ref">
@@ -723,6 +721,10 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xd:doc>
+        <xd:desc><xd:b>ToDo</xd:b>: Die Indexeinträge müssen in der Edition wenigstens als Sprungmarken sichtbar sein.</xd:desc>
+    </xd:doc>
+    <xsl:template match="tei:index"/>
 
 
     <xsl:template name="bk_is_account">
@@ -794,5 +796,19 @@
         </xsl:variable>
         <xsl:value-of select="bk:reduce(number($amount), $data_as)"/>
     </xsl:template>
+    
+    <xd:doc>
+        <xd:desc>Die Seitenzahlen tragen errechnete Bezeichner
+        ToDo: auslagern eine gemeinsame Ressource, die auch schon beim totei berücksichtigt wird?</xd:desc>
+    </xd:doc>
+    <xsl:function name="bas:folioangabe">
+        <xsl:param name="me"/>
+        <xsl:choose>
+            <xsl:when test="$me/@n"><xsl:value-of select="$me/@n"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="ceiling((count($me/preceding::tei:pb) + 1) div 2)"/>
+                <xsl:choose><xsl:when test="(count($me/preceding::tei:pb) + 1) mod 2 = 1">r</xsl:when>
+                    <xsl:otherwise>v</xsl:otherwise></xsl:choose></xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
     
 </xsl:stylesheet>

@@ -58,14 +58,14 @@
                     <div class="ym-col2" id="calc">
                         <!--                            <input type="button" value="Berechnen" onclick="summieren()"/>-->
                         <div class="ym-cbox">
-                            <p><a href="http://gams.uni-graz.at/archive/objects/{$pid}/datastreams/TEI_SOURCE/content" target="_blank"><img src="http://gams.uni-graz.at/reko/img/tei_icon.gif"/> Quelldaten</a></p>
+                            <p><a href="/archive/objects/{$pid}/datastreams/TEI_SOURCE/content" target="_blank"><img src="http://gams.uni-graz.at/reko/img/tei_icon.gif"/> Quelldaten</a></p>
                             <h2>
                                 <a id="AnsichtUmschalter" href="javascript:diplomatic()"
                                     >Editionsansicht</a>
                             </h2>
                             <h2><a href="?mode=tab">tabellarische Ansicht</a></h2>
                             <h2>Beträge</h2>
-                            <p><a href="http://gams.uni-graz.at/archive/objects/{$pid}/datastreams/RDF/content">RDF/XML</a></p>
+                            <p><a href="/archive/objects/{$pid}/datastreams/RDF/content">RDF/XML</a></p>
                             <div id="calculations">
                                 <xsl:text> </xsl:text>
                             </div>
